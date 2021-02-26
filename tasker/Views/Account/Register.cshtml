@@ -1,0 +1,41 @@
+﻿@model tasker.Models.RegisterModel
+@{ 
+    ViewData["Title"] = "Registration";
+}
+<form asp-action="Register" asp-controller="Account">
+    <h4 class="text-dark text-muted offset-1 m-4">Stay in personal profit</h4>
+
+    <div class="row regAres p-4">
+        <div class="regPanel offset-4 col-4">
+            <div class="form-group">
+                <label asp-for="Email" class="control-label">Email</label>
+                <input type="text" asp-for="Email" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Password" class="control-label">Password</label>
+                <input type="password" asp-for="Password" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="ConfirmPassword" class="control-label">Confirm Password</label>
+                <input type="password" asp-for="ConfirmPassword" class="form-control" />
+            </div>
+            <div class="form-check m-2">
+                <input type="checkbox" id="agree">
+                <label for="agree">I agree with all terms and rights</label>
+            </div>
+            <div class="form-group text-center mt-1">
+                <input type="submit" value="Register" class="btn btn-secondary" />
+            </div>
+            <div class="errorHint">
+
+                @foreach (var errors in Html.ViewData.ModelState)
+                {
+                    foreach (var error in errors.Value.Errors)
+                    {
+                        <p>@error.ErrorMessage</p>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</form>

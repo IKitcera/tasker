@@ -1,0 +1,61 @@
+﻿@model tasker.Models.LoginModel
+@{ 
+    ViewData["Title"] = "Log in";
+}
+<form asp-controller="Account" asp-action="Login" id="log_in">
+    <div class="row">
+        <div class="col-lg-6 col-sm-12 text-center p-5" id="firstSideLog">
+            <div class="container p-4">
+                <h4 class="m-3">Log in</h4>
+                <div id="personIcoContainer">
+                    <i class="bi bi-person-fill"></i>
+                </div>
+                <div class="input-group p-1 pl-5 pr-5 mt-4">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="Email">@@</span>
+                    </div>
+                    <input type="text" class="form-control" placeholder="Email" aria-label="Email" aria-describedby="Email" asp-for="Email">
+                </div>
+                <div class="input-group p-1 pr-5 pl-5 pr-5">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">
+                            <i class="bi bi-key-fill"></i>
+                        </span>
+                    </div>
+                    <input type="password" class="form-control" placehplder="Password" aria-label="Password" aria-describedby="Password" asp-for="Password">
+                </div>
+                <div class="form-check text-left p-1 pl-5">
+                    <input type="checkbox" id="doNotExit" checked>
+                    <label for="doNotExit">Don`t log out</label>
+                </div>
+                <div>
+                    <button type="submit" class="btn btn-dark m-3">Login</button>
+                    <button type="button" class="btn btn-dark m-3" value="reigister" name="register" onclick="location.href='@Url.Action("Register", "Account")'">Registration</button>
+                </div>
+            </div>
+            <div class="errorHint">
+
+                @foreach (var errors in Html.ViewData.ModelState)
+                {
+                    foreach (var error in errors.Value.Errors)
+                    {
+                        <p>@error.ErrorMessage</p>
+                    }
+                }
+            </div>
+        </div>
+        <div class="col-lg-6 col-sm-12 text-center p-5">
+            <div style="padding:60px; padding-top: 100px">
+                <h4 class="m-3 text-center">Log in with Google</h4>
+                <div id="googleIcoContainer ">
+                    <i class="bi bi-google"></i>
+                </div>
+                <h5 class="text-left">or</h5>
+                <button type="button" class="btn btn-dark">Login</button>
+                <button type="button" class="btn btn-dark m-3">Registration</button>
+            </div>
+        </div>
+       
+    </div>
+
+</form>

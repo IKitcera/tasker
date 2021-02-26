@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/generalStyles.css" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="~/js/script.js"></script>
+</head>
+<body>
+    <header>
+    <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+        <h3 class="text-white-50">Tasker</h3>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <ul class="nav navbar-nav navbar-brand col offset-lg-4 offset-md-2" id="nav">
+                <li class="nav-item active col"><a href="" class="navbar-brand">Home</a></li>
+                <li class="nav-item col"><a href="" class="navbar-brand">Perception</a></li>
+                <li class="nav-item col"><a href="" class="navbar-brand">Room</a></li>
+                <li class="nav-item col"><a href="" class="navbar-brand">About</a></li>
+            </ul>
+        </div>
+    </nav>
+    </header>
+    <main>
+        <div>
+            @RenderBody()
+        </div>
+    </main>
+    <footer>
+
+    </footer>
+    
+</body>
+</html>

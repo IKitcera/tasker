@@ -1,0 +1,133 @@
+﻿body {
+    background: mistyrose;
+}
+
+footer {
+    border-top: 1px solid silver;
+}
+
+.navbar {
+}
+
+#nav {
+    flex-direction: row;
+}
+
+.nav-item {
+    border: 2px solid dimgray;
+    margin: 0px 10px 0px 10px;
+    padding: 0px;
+    text-align: center;
+    border-radius: 5px;
+}
+
+    .nav-item.active {
+        border-color: lightgrey;
+        box-shadow: 0px 0px 5px peachpuff;
+    }
+
+    .nav-item:hover {
+        box-shadow: 0px 0px 8px peachpuff;
+    }
+
+.regAres {
+    background: url("../src/104122010-spiral-notebook-page-and-coffee-on-white-background-minimal-flat-lay-.jpg"), dimgray;
+    background-blend-mode: overlay;
+}
+
+.regPanel {
+    border: 2px solid rgba(55,55,55,0.56);
+    box-shadow: 1px 1px 7px rgba(60,63,65,0.86);
+    border-radius: 20px;
+    backdrop-filter: brightness(0.6) blur(30px);
+    color: white;
+}
+
+.errorHint {
+    background: rgba(255,0,0,0.51);
+    border-radius: 5px;
+}
+
+#log_in {
+    margin: 15px;
+    padding: 10px;
+    background: url("../src/104122010-spiral-notebook-page-and-coffee-on-white-background-minimal-flat-lay-.jpg") center no-repeat;
+    border-radius: 10px;
+    box-shadow: 1px 1px 7px rgba(60,63,65,0.86);
+}
+
+.container {
+    align-content: center;
+    backdrop-filter: blur(13px);
+    border: 2px solid black;
+    border-radius: 10px;
+    box-shadow: 0 0 1px;
+    padding: 10px;
+}
+
+.bi-person-fill {
+    font-size: 50px;
+    border: 2px solid black;
+    padding: 0 13px 10px 13px;
+    border-radius: 50%;
+}
+
+.bi-google {
+    font-size: 50px;
+    border: 2px solid black;
+    padding: 0 13px 10px 13px;
+    border-radius: 50%;
+}
+
+select {
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid black;
+}
+
+    select option:checked {
+        background: rosybrown;
+    }
+
+    select option {
+        background: mistyrose;
+        font-size: 14px;
+    }
+
+input[type="text"] {
+    background: transparent;
+    border: none;
+    text-decoration: underline;
+    text-decoration-style: dotted;
+}
+
+    input[type="text"]:focus {
+        outline: none !important;
+    }
+
+.btn.myBtn {
+    background: rosybrown;
+}
+
+.tasks {
+    padding-left: 50px;
+    margin-left: 50px;
+}
+
+.category {
+    border-bottom: 1px solid lightgrey;
+}
+
+body::-webkit-scrollbar {
+    width: 1em;
+}
+
+body::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    border-radius: 15px;
+}
+
+body::-webkit-scrollbar-thumb {
+    background-color: rgba(15,27,37,0.86);
+    border-radius: 15px;
+}
