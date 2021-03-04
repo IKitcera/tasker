@@ -10,6 +10,7 @@ namespace tasker.Models.TaskModel
     {
         public int Id { get; set; }
         public List<Category> categories { get; set; } = new List<Category>();
+        public StopWatcher stopWatcher { get; set; } = new StopWatcher();
     }
 
     public static class InitTaskManager

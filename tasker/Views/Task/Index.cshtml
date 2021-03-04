@@ -2,98 +2,133 @@
 @{
     ViewData["Title"] = "Home page";
 }
-    <h4 class="text-dark text-muted offset-1 m-4">Stay in personal profit</h4>
 
-    <div class="text-right">
-        <button type="button" class="btn btn-secondary text-right mr-4" onclick="location.href='@Url.Action("Logout", "Account")'">Log out</button>
-    </div>
-
-    <div class="tasks">
-        <div class="row">
-            <form asp-action="AddCategory" asp-controller="Task" class="col-3">
-                <div class="row">
-                    <div class="addItem col-lg-10 col-md-8 col-sm-10">
-                        <input type="text" placeholder="Add category" name="categoryName" id="categoryName">
-                    </div>
-                        <button class="btn" type="submit">
-                            <i class="bi bi-plus-circle-dotted"></i>
-                        </button>
-                </div>
-            </form>
-            <form asp-action="AddTask" asp-controller="Task" class="col-6">
-                <div class="row">
-                    <div class="addItem offset-1 pl-4 col-lg-8 col-md-9 col-sm-10">
-                        <input type="text" placeholder="Add item" name="taskName" id="taskName" onkeydown="FocusOnAddTask()">
-                    </div>
-                        <div class="col-1 pl-5">
-                            <button type="submit" class="btn">
-                                <i class="bi bi-plus-circle-dotted"></i>
-                            </button>
-                        </div>
-                   
-                </div>
-                    <div class="row" id="higgenOp" hidden>
-                        <div class="offset-2 col-lg-8 col-md-9 col-sm-10 mb-2">
-                            <select name="catId" id="catId" onselect="SelectedCategory()">
-                                <option disabled selected>Select category</option>
-                                @foreach (var c in Model.categories)
-                                {
-                                    <option value="@c.Id">@c.Name</option>
-                                }
-                            </select>
-                        </div>
-                    </div>
-            </form>
+<div class="offset-10" id="showSWBtn" hidden>
+   <button class="btn btn-outline-secondary pl-3 pr-3" onclick="ShowSWBtnClick()">Show stopwatch</button>
+</div>
+<div class="timerBlock m-4 p-1" id="timerBlock">
+    <div class="row headerTimerBlock">
+        <div class="offset-1 col-9">
+            <h5 class="text-muted">To become a professional in something, you need to devote 10,000 hours to the chosen occupation.</h5>
         </div>
-        @foreach (var category in Model.categories)
-        {
+        <div>
+            <button class="btn btn-outline-secondary pl-3 pr-3" onclick="HideSWBtnClick()">Hide</button>
+        </div>
+    </div>
+    <form asp-action="TimerStop" asp-controller="Task" class="row">
+        <div class="col-7">
             <div class="row">
-                <div class="col-lg-3 col-md-3 col-sm-10" style="color: @category.Color; border-bottom: 1px solid lightgrey;">
-                    <div class="row" id=@("showCategory" + category.Id.ToString())>
-                        <h6 class="col-9">@category.Name</h6>
-                        <button class="btn col-1" type="button" onclick="editCategoryClick(@category.Id)">
-                            <i class="bi bi-pencil-fill"></i>
-                        </button>
-                        <button class="btn col-1" type="button" onclick="location.href='@Url.Action("DeleteCategory", "Task", new { categoryId = category.Id })'">
-                            <i class="bi bi-trash"></i>
-                        </button>
-                    </div>
-                  
-                    <form class="row" asp-controller="Task" asp-action="UpdateCategory" id=@("editCategory" + category.Id.ToString()) hidden>
-                        <input type="text" name="newName" class="col-10" value="@category.Name">
-                        <input name="id" value="@category.Id" hidden/>
-                        <button class="btn col-1" type="submit" onclick="finishEditCategory(@category.Id)">
-                            <i class="bi bi-check-circle"></i>
-                        </button>
-                    </form>
+                <h5 class="offset-2">@Model.stopWatcher.Name</h5>
+                <button class="btn">
+                    <i class="bi bi-pencil-fill"></i>
+                </button>
+                <i class="bi bi-stopwatch-fill offset-1 pl-3"></i>
+                <h5 class="pl-3">@(Math.Round((double)(Model.stopWatcher.totalMinutes)/60, 3))</h5>
+                <p class="pl-2">hours</p>
+                <p class=" pl-5 col-2" id="stopwatchMinutes" style="color: firebrick"></p>
+                <input id="minutes" name="minutes" hidden />
+            </div>
+        </div>
+        <div class="col ml-5">
+            <button type="button" class="btn btn-outline-success" id="startSW" onclick="startStopWatch()">
+                Start <i class="bi bi-play"></i>
+            </button>
+            <button type="submit" class="btn btn-outline-danger ml-4 pl-3" id="stopSW" onclick="stopStopWatch()" hidden>
+                Stop <i class="bi bi-stop"></i>
+            </button>
+            <button type="button" class="btn btn-outline-dark ml-1" id="resetSW" onclick="resetStopWatch(); location.href='@Url.Action("TimerReset", "Task")'">
+                Reset <i class="bi bi-arrow-counterclockwise"></i>
+            </button>
+        </div>
+    </form>
+</div>
+
+<div class="tasks">
+    <div class="row">
+        <form asp-action="AddCategory" asp-controller="Task" class="col-3">
+            <div class="row">
+                <div class="addItem col-lg-10 col-md-8 col-sm-10">
+                    <input type="text" placeholder="Add category" name="categoryName" id="categoryName">
                 </div>
-                   
-                <div class="col-lg-6 col-md-6 col-sm-12 pl-3" style="border-left: 5px solid @category.Color; border-bottom: 1px solid lightgrey;">
-                    @foreach (var task in category.Tasks)
-                    {
-                        <div class="row pl-3" id=@("showTask" + task.Id.ToString())>
-                            <div class="form-check text-left col-9">
-                                <input type="checkbox" name="t">
-                                <label class="pl-4" for="t"> @task.taskName </label>
-                            </div>
-                            <button class="btn" type="button" onclick="editTaskClick(@task.Id)">
-                                <i class="bi bi-pencil-fill"></i>
-                            </button>
-                            <button class="btn" type="button" onclick="location.href='@Url.ActionLink("DeleteTask", "Task", new { categoryId=category.Id, taskId=task.Id})'">
-                                <i class="bi bi-trash"></i>
-                            </button>
-                        </div>
-                        <form class="row pl-3" asp-controller="Task" asp-action="UpdateTask" asp-action" id=@("editTask" + task.Id.ToString()) hidden>
-                            <input type="text" name="newName" class="col-9 offset-1" value="@task.taskName">
-                            <input name="catId" value="@category.Id" hidden />
-                            <input name="taskId" value="@task.Id" hidden />
-                            <button class="btn" type="submit" onclick="finishEditTask(@task.Id)">
-                                <i class="bi bi-check-circle"></i>
-                            </button>
-                        </form>
-                    }
+                <button class="btn" type="submit">
+                    <i class="bi bi-plus-circle-dotted"></i>
+                </button>
+            </div>
+        </form>
+        <form asp-action="AddTask" asp-controller="Task" class="col-6">
+            <div class="row">
+                <div class="addItem offset-1 pl-4 col-lg-8 col-md-9 col-sm-10">
+                    <input type="text" placeholder="Add item" name="taskName" id="taskName" onkeydown="FocusOnAddTask()">
+                </div>
+                <div class="col-1 pl-5">
+                    <button type="submit" class="btn">
+                        <i class="bi bi-plus-circle-dotted"></i>
+                    </button>
+                </div>
+
+            </div>
+            <div class="row" id="higgenOp" hidden>
+                <div class="offset-2 col-lg-8 col-md-9 col-sm-10 mb-2">
+                    <select name="catId" id="catId" onselect="SelectedCategory()">
+                        <option disabled selected>Select category</option>
+                        @foreach (var c in Model.categories)
+                                {
+                        <option value="@c.Id">@c.Name</option>
+                                }
+                    </select>
                 </div>
             </div>
-        }
+        </form>
     </div>
-    <h1>13</h1>
+    @foreach (var category in Model.categories)
+        {
+    <div class="row">
+        <div class="col-lg-3 col-md-3 col-sm-10" style="color: @category.Color; border-bottom: 1px solid lightgrey;">
+            <div class="row" id=@("showCategory" + category.Id.ToString())>
+                <h6 class="col-9">@category.Name</h6>
+                <button class="btn col-1" type="button" onclick="editCategoryClick(@category.Id)">
+                    <i class="bi bi-pencil-fill"></i>
+                </button>
+                <button class="btn col-1" type="button" onclick="location.href='@Url.Action("DeleteCategory", "Task", new { categoryId = category.Id })'">
+                    <i class="bi bi-trash"></i>
+                </button>
+            </div>
+
+            <form class="row" asp-controller="Task" asp-action="UpdateCategory" id=@("editCategory" + category.Id.ToString()) hidden>
+                <input type="text" name="newName" class="col-10" value="@category.Name">
+                <input name="id" value="@category.Id" hidden />
+                <button class="btn col-1" type="submit" onclick="finishEditCategory(@category.Id)">
+                    <i class="bi bi-check-circle"></i>
+                </button>
+            </form>
+        </div>
+
+        <div class="col-lg-6 col-md-6 col-sm-12 pl-3" style="border-left: 5px solid @category.Color; border-bottom: 1px solid lightgrey;">
+            @foreach (var task in category.Tasks)
+                    {
+            <div class="row pl-3" id=@("showTask" + task.Id.ToString())>
+                <div class="form-check text-left col-9">
+                    <input type="checkbox" id="@task.Id" onloadeddata="checkTask(@task.Id)" onclick="checkTask(@task.Id); location.href='@Url.Action("CheckTask", "Task", new {categoryId=category.Id, taskId=task.Id})'" checked="@task.isDone">
+                    <label class="pl-4" for="t"> @task.taskName </label>
+                </div>
+                <button class="btn" type="button" onclick="editTaskClick(@task.Id)">
+                    <i class="bi bi-pencil-fill"></i>
+                </button>
+                <button class="btn" type="button" onclick="location.href='@Url.ActionLink("DeleteTask", "Task", new { categoryId=category.Id, taskId=task.Id})'">
+                    <i class="bi bi-trash"></i>
+                </button>
+            </div>
+            <form class="row pl-3" asp-controller="Task" asp-action="UpdateTask" asp-action" id=@("editTask" + task.Id.ToString()) hidden>
+                <input type="text" name="newName" class="col-9 offset-1" value="@task.taskName">
+                <input name="catId" value="@category.Id" hidden />
+                <input name="taskId" value="@task.Id" hidden />
+                <button class="btn" type="submit" onclick="finishEditTask(@task.Id)">
+                    <i class="bi bi-check-circle"></i>
+                </button>
+            </form>
+                    }
+        </div>
+    </div>
+        }
+</div>
+<h1>13</h1>

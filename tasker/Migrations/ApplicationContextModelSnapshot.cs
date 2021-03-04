@@ -106,7 +106,31 @@ namespace tasker.Migrations
                                     b2.Navigation("Tasks");
                                 });
 
+                            b1.OwnsOne("tasker.Models.TaskModel.StopWatcher", "stopWatcher", b2 =>
+                                {
+                                    b2.Property<int>("TaskManagerUserId")
+                                        .HasColumnType("int");
+
+                                    b2.Property<int>("Id")
+                                        .HasColumnType("int");
+
+                                    b2.Property<string>("Name")
+                                        .HasColumnType("nvarchar(max)");
+
+                                    b2.Property<long>("totalMinutes")
+                                        .HasColumnType("bigint");
+
+                                    b2.HasKey("TaskManagerUserId");
+
+                                    b2.ToTable("TaskManager");
+
+                                    b2.WithOwner()
+                                        .HasForeignKey("TaskManagerUserId");
+                                });
+
                             b1.Navigation("categories");
+
+                            b1.Navigation("stopWatcher");
                         });
 
                     b.Navigation("taskManager");

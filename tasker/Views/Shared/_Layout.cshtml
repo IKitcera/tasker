@@ -30,6 +30,14 @@
     </nav>
     </header>
     <main>
+        <div class="row">
+            <div class="offset-1 col-9 text-left">
+                <h4 class="text-dark text-muted offset-1 m-4">Stay in personal profit</h4>
+            </div>
+            <div class="justify-content-center mt-3">
+                <button type="button" class="btn btn-secondary text-right mr-4 p-2" onclick="location.href='@Url.Action("Logout", "Account")'">Log out</button>
+            </div>
+        </div>
         <div>
             @RenderBody()
         </div>

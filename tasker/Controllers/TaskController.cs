@@ -5,6 +5,9 @@ using System.Linq;
 using tasker.Data;
 using tasker.Models.TaskModel;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+
+using System.Diagnostics;
 
 namespace tasker.Controllers
 {
@@ -19,8 +22,10 @@ namespace tasker.Controllers
         [Authorize]
         public IActionResult Index()
         {
+            
             if (User.Identity != null)
             {
+             
                 taskManager = GetTaskManager();
             }
             else
@@ -28,22 +33,23 @@ namespace tasker.Controllers
                 taskManager = InitTaskManager.firstTM;
             }
             return View(taskManager);
+           
         }
-        public IActionResult DeleteCategory(int categoryId)
+        public async Task<IActionResult> DeleteCategory(int categoryId)
         {
             var category = GetTaskManager().categories.Where(c => c.Id == categoryId).FirstOrDefault();
             GetTaskManager().categories.Remove(category);
-            db.SaveChangesAsync();
+            await db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
         [HttpPost]
-        public IActionResult AddCategory(string categoryName)
+        public async Task<IActionResult> AddCategory(string categoryName)
         {
             Random r = new Random();
             string randomColor = "rgb(" + r.Next(0, 255).ToString() + "," + r.Next(0, 255).ToString() + "," + r.Next(0, 255).ToString() + ")";
             Category category = new Category { Name = categoryName, Color = randomColor, Tasks = null };
             GetTaskManager().categories.Add(category);
-            db.SaveChangesAsync();
+            await db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
         [HttpPost]
@@ -54,12 +60,12 @@ namespace tasker.Controllers
             return RedirectToAction("Index");
         }
 
-        public IActionResult DeleteTask(int categoryId, int taskId)
+        public async Task<IActionResult> DeleteTask(int categoryId, int taskId)
         {
             var category = GetTaskManager().categories.Where(c => c.Id == categoryId).FirstOrDefault();
             category.Tasks.Remove(category.Tasks.Find(task => task.Id == taskId));
 
-            db.SaveChangesAsync();
+            await db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
         [HttpPost]
@@ -85,16 +91,64 @@ namespace tasker.Controllers
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
-        public IActionResult CheckTask(int catId, Models.TaskModel.Task task)
+        public async Task<IActionResult> CheckTask(int categoryId, int taskId)
         {
-            GetTaskManager().categories.Where(c => c.Id == catId).FirstOrDefault().ChangeStatus(task);
-            db.SaveChangesAsync();
+            var category = GetTaskManager().categories.Where(c => c.Id == categoryId).FirstOrDefault();
+            var task = category.Tasks.Where(t => t.Id == taskId).FirstOrDefault();
+
+            if (task.isDone)
+                task.isDone = false;
+            else
+                task.isDone = true;
+
+            Sort(category.Tasks);
+
+            await db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
-
+        [HttpPost]
+        public async Task<IActionResult> TimerStop(int minutes)
+        {
+            GetTaskManager().stopWatcher.totalMinutes += minutes;
+            await db.SaveChangesAsync();
+            return RedirectToAction("Index");
+        }
+        public async Task<IActionResult> TimerReset()
+        {
+            GetTaskManager().stopWatcher = new StopWatcher();
+            await db.SaveChangesAsync();
+            return RedirectToAction("Index");
+        }
         private TaskManager GetTaskManager()
         {
             return db.Users.Where(u => u.Email == User.Identity.Name).FirstOrDefault().taskManager;
+        }
+       
+        private void Sort(List<tasker.Models.TaskModel.Task> tasks)
+        {
+            List<tasker.Models.TaskModel.Task> Checked = new List<tasker.Models.TaskModel.Task>();
+            List<tasker.Models.TaskModel.Task> Unchecked = new List<tasker.Models.TaskModel.Task>();
+
+            for (int i = 0; i < tasks.Count; i++)
+            {
+                if (tasks[i].isDone)
+                {
+                    Checked.Add(tasks[i]);
+                }
+                else
+                {
+                    Unchecked.Add(tasks[i]);
+                }
+            }
+            tasks.Clear();
+            foreach (var u in Unchecked)
+            {
+                tasks.Add(u);
+            }
+            foreach (var c in Checked)
+            {
+                tasks.Add(c);
+            }
         }
     }
 }
