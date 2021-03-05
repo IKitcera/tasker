@@ -71,14 +71,14 @@ namespace tasker.Controllers
         [HttpPost]
         public async Task<IActionResult> AddTask(int catId, string taskName)
         {
-            try
-            {
+            if(catId != 0 && taskName != "") 
+            { 
                 Models.TaskModel.Task task = new Models.TaskModel.Task { taskName = taskName, isDone = false };
                 var category = GetTaskManager().categories.Where(c => c.Id == catId).FirstOrDefault();
                 category.Tasks.Add(task);
                 await db.SaveChangesAsync();
             }
-            catch
+            else
             {
                 ModelState.AddModelError("", "any category was selected");
             }
@@ -107,6 +107,16 @@ namespace tasker.Controllers
             return RedirectToAction("Index");
         }
         [HttpPost]
+        public async Task<IActionResult> ChangeSWName(string swNewName)
+        {
+            if (swNewName != null)
+            {
+                GetTaskManager().stopWatcher.Name = swNewName;
+                await db.SaveChangesAsync();
+            }
+            return RedirectToAction("Index");
+        }
+        [HttpPost]
         public async Task<IActionResult> TimerStop(int minutes)
         {
             GetTaskManager().stopWatcher.totalMinutes += minutes;
@@ -124,7 +134,7 @@ namespace tasker.Controllers
             return db.Users.Where(u => u.Email == User.Identity.Name).FirstOrDefault().taskManager;
         }
        
-        private void Sort(List<tasker.Models.TaskModel.Task> tasks)
+        private List<tasker.Models.TaskModel.Task> Sort(List<tasker.Models.TaskModel.Task> tasks)
         {
             List<tasker.Models.TaskModel.Task> Checked = new List<tasker.Models.TaskModel.Task>();
             List<tasker.Models.TaskModel.Task> Unchecked = new List<tasker.Models.TaskModel.Task>();
@@ -149,6 +159,7 @@ namespace tasker.Controllers
             {
                 tasks.Add(c);
             }
+            return tasks;
         }
     }
 }

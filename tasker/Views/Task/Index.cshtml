@@ -15,17 +15,20 @@
             <button class="btn btn-outline-secondary pl-3 pr-3" onclick="HideSWBtnClick()">Hide</button>
         </div>
     </div>
+
     <form asp-action="TimerStop" asp-controller="Task" class="row">
         <div class="col-7">
             <div class="row">
-                <h5 class="offset-2">@Model.stopWatcher.Name</h5>
-                <button class="btn">
+                <h5 class="offset-2" id="swName">@Model.stopWatcher.Name</h5>
+
+               
+                <button class="btn" type="button" id="swChangeBtn" onclick="editSWNameClick()">
                     <i class="bi bi-pencil-fill"></i>
                 </button>
                 <i class="bi bi-stopwatch-fill offset-1 pl-3"></i>
                 <h5 class="pl-3">@(Math.Round((double)(Model.stopWatcher.totalMinutes)/60, 3))</h5>
                 <p class="pl-2">hours</p>
-                <p class=" pl-5 col-2" id="stopwatchMinutes" style="color: firebrick"></p>
+                <p class=" pl-5 col-lg-2 col-md-2 col-sm-3" id="stopwatchMinutes" style="color: firebrick"></p>
                 <input id="minutes" name="minutes" hidden />
             </div>
         </div>
@@ -41,14 +44,20 @@
             </button>
         </div>
     </form>
+    <form asp-action="ChangeSWName" asp-controller="Task">
+        <input type="text" class="offset-2" name="swNewName" id="swNewName" value="@Model.stopWatcher.Name" hidden />
+        <button class="btn" type="submit" id="swChangeOkBtn" onclick="var swnn=editSWNameOk();" hidden>
+            <i class="bi bi-check-circle"></i>
+        </button>
+    </form>
 </div>
 
 <div class="tasks">
     <div class="row">
-        <form asp-action="AddCategory" asp-controller="Task" class="col-3">
+        <form asp-action="AddCategory" asp-controller="Task" class="col-3 ">
             <div class="row">
                 <div class="addItem col-lg-10 col-md-8 col-sm-10">
-                    <input type="text" placeholder="Add category" name="categoryName" id="categoryName">
+                    <input type="text" autocomplete="off" placeholder="Add category" name="categoryName" id="categoryName">
                 </div>
                 <button class="btn" type="submit">
                     <i class="bi bi-plus-circle-dotted"></i>
@@ -58,7 +67,7 @@
         <form asp-action="AddTask" asp-controller="Task" class="col-6">
             <div class="row">
                 <div class="addItem offset-1 pl-4 col-lg-8 col-md-9 col-sm-10">
-                    <input type="text" placeholder="Add item" name="taskName" id="taskName" onkeydown="FocusOnAddTask()">
+                    <input type="text" autocomplete="off" placeholder="Add item" name="taskName" id="taskName" onkeydown="FocusOnAddTask()">
                 </div>
                 <div class="col-1 pl-5">
                     <button type="submit" class="btn">
@@ -95,7 +104,7 @@
             </div>
 
             <form class="row" asp-controller="Task" asp-action="UpdateCategory" id=@("editCategory" + category.Id.ToString()) hidden>
-                <input type="text" name="newName" class="col-10" value="@category.Name">
+                <input type="text" name="newName" autocomplete="off" class="col-10" value="@category.Name">
                 <input name="id" value="@category.Id" hidden />
                 <button class="btn col-1" type="submit" onclick="finishEditCategory(@category.Id)">
                     <i class="bi bi-check-circle"></i>
@@ -119,7 +128,7 @@
                 </button>
             </div>
             <form class="row pl-3" asp-controller="Task" asp-action="UpdateTask" asp-action" id=@("editTask" + task.Id.ToString()) hidden>
-                <input type="text" name="newName" class="col-9 offset-1" value="@task.taskName">
+                <input type="text" name="newName" autocomplete="off" class="col-9 offset-1" value="@task.taskName">
                 <input name="catId" value="@category.Id" hidden />
                 <input name="taskId" value="@task.Id" hidden />
                 <button class="btn" type="submit" onclick="finishEditTask(@task.Id)">
@@ -131,4 +140,3 @@
     </div>
         }
 </div>
-<h1>13</h1>

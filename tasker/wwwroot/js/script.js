@@ -62,8 +62,20 @@ function HideSWBtnClick() {
     document.getElementById('timerBlock').hidden = true;
     document.getElementById('showSWBtn').hidden = false;
 }
+function editSWNameClick() {
+    document.getElementById('swName').hidden = true;
+    document.getElementById('swChangeBtn').hidden = true;
+    document.getElementById('swNewName').hidden = false;
+    document.getElementById('swChangeOkBtn').hidden = false;
+}
+function editSWNameOk() {
+    document.getElementById('swNewName').hidden = true;
+    document.getElementById('swChangeOkBtn').hidden = true;
+    document.getElementById('swName').hidden = false;
+    document.getElementById('swChangeOkBtn').hidden = false;
 
-
+    return document.getElementById('swNameChange').value;
+}
 function startStopWatch() {
     document.getElementById('startSW').hidden = true;
     document.getElementById('resetSW').hidden = true;
